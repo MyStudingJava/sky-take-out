@@ -1,1 +1,19 @@
 # sky-take-out
+
+# day-01-08-开发环境搭建_后端环境搭建_前后端联调
+### 编译项目报错
+```shell
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile (default-compile) on project sky-common: Fatal error compiling: java.lang.NoSuchFieldError: Class com.sun.tools.javac.tree.JCTree$JCImport does not have member field 'com.sun.tools.javac.tree.JCTree qualid' -> [Help 1]
+```
+#### 错误原因:JDK和Lombok版本不对应
+#### 解决方式
+1.保持jdk21,修改lombok版本是1.18.30
+> 在Maven项目的pom.xml文件中，配置Lombok插件。确保插件的版本与你的Lombok版本和JDK版本兼容。以下是一个示例配置：
+```diff
+...
+<properties>
+    <mybatis.spring>2.2.0</mybatis.spring>
+-    <lombok>1.18.20</lombok>
++    <lombok>1.18.30</lombok>
+...
+```

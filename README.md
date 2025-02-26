@@ -36,3 +36,9 @@ sky:
     username: root
     password: "xxxx"
 ```
+
+
+## 新东西
+### 1.idea 进入下一层和进入底层快捷键
+> ctrl+鼠标左键：进入接口，它是进入下一层
+> ctrl+alt+鼠标左键：进入实现方法，它是进入最底层

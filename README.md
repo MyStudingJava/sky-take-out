@@ -1,6 +1,7 @@
 # sky-take-out
 
 # day-01-08-开发环境搭建_后端环境搭建_前后端联调
+## 报错
 ### 1. 编译项目报错
 ```shell
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile (default-compile) on project sky-common: Fatal error compiling: java.lang.NoSuchFieldError: Class com.sun.tools.javac.tree.JCTree$JCImport does not have member field 'com.sun.tools.javac.tree.JCTree qualid' -> [Help 1]

@@ -53,3 +53,6 @@ sky:
 # TODO
 ## 1.Navicat界面展示UNIQUE 和 DEFAULT的值
 ## 2.Swagger新增接口设置不显示id
+## 3.idea的控制台的错误信息是否能设置的更显眼
+## 4.insert语句,需要用mybatis去完成
+## 5.处理SQL异常,之后用数据库校验报错信息返回前端

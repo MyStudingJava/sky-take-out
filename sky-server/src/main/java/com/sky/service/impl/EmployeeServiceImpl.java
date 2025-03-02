@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //密码比对
         //对前端穿过来的明文密码进行md5加密处理
-        // password = DigestUtils.md5DigestAsHex(password.getBytes());
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
             //密码错误
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
@@ -67,6 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     public void save(EmployeeDTO employeeDTO) {
         // 需要将DTO转换为entity
+        // 因为 DTO是service层,controller层是接受和往外传的,所以里面只能包含需要的数据
         Employee employee = new Employee();
         // 不用一个一个去set,用对象属性拷贝
         BeanUtils.copyProperties(employeeDTO, employee);

@@ -53,8 +53,43 @@ sky:
 ### 4.JWT的流程
 ![JWT的流程](https://i-blog.csdnimg.cn/direct/b8bf46b45a224d6c9b4fbc9f409624cf.png)
 
-### 5.客户端每发送一次请求都是一个线程
-> 每次客户端发送请求,都会创建一个线程,线程的id就是请求的id
+### 5.ThreadLocal
+##### 解析出登陆员工id后，如何传递给Service的save方法？
+![ThreadLocal](https://i-blog.csdnimg.cn/direct/6a5f046f513640918497de7a0cefdd18.png)
+
+##### 使用条件
+> 客户端每一次发出的请求，tomcat都会为其分配一个单独的线程，在这个线程会执行不同的代码功能，比如拦截器，controller，service等等，它们都属于同一个线程，满足这个条件，就可以使用ThreadLocal，然后将数据存进去，在对应的地方取出来，所以通过ThreadLocal这个存储空间，即可达到相应的效果
+
+##### 验证：每一次请求都会对应一个单独的线程
+> 点击保存执行一次
+![线程](https://i-blog.csdnimg.cn/direct/f95566a67d4643d78223545a2b8727b9.png)
+![线程](https://i-blog.csdnimg.cn/direct/eccc2395dd4547ea8fa47549a647e1ed.png)
+
+
+##### 再次点击保存，重新发起请求即重新获取一个单独的线程
+![线程](https://i-blog.csdnimg.cn/direct/4a07fb9aeaf444a194120e6095ffe1ce.png)
+
+#### ThreadLocal常用方法
+![ThreadLocal常用方法](https://i-blog.csdnimg.cn/direct/d0f2f0f0c0e34f0c8e0a0f0b0c0f0f0f.png)
+
+##### 注意：
+> 在我们使用ThreadLocal时，往往对其进行封装成一个工具类，便于使用
+![ThreadLocal常用方法](https://i-blog.csdnimg.cn/direct/062da7b7058f4850946bed3b7c03f393.png)
+
+##### 实现思路
+> 在已经解析出用户id的地方，进行调用ThreadLocal.set方法，将id存进去
+![ThreadLocal常用方法](https://i-blog.csdnimg.cn/direct/10743e9440ec47d095a6d736e75ba0e8.png)
+> 然后在service中进行取出
+![ThreadLocal常用方法](https://i-blog.csdnimg.cn/direct/9b0525fd220547919228bf6bcc43a14a.png)
+
+> 扩展：
+> 在解析出登录员工id后如何传递给Service的save方法？
+> 答：通过ThreadLocal，它是Thread的局部变量，为每个线程提供单独一份的存储空间，具有线程隔离的效果，只有在线程内才能获取到对应的值，在线程外则不能访问。 
+> 可以通过在controller、service和拦截器中输出线程的id来看是否单次请求是同一个线程，经实验验证是同一个线程。
+> 
+> 小技巧：选中要计算的表达式，然后右键，选择Evaluate Expression，然后点击Evaluate即可。
+> ![小技巧](https://i-blog.csdnimg.cn/blog_migrate/3f47bc877db2f3f274a2ff7ab2d20247.png)
+
 
 # TODO
 1. [ ] Navicat设计界面展示UNIQUE 和 DEFAULT的值  

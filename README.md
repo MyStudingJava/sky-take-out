@@ -50,9 +50,17 @@ sky:
 > 持久层Mapper是介于业务层和数据访问层之间的一种层，它对数据访问层进行了封装，实现了对数据访问的抽象，从而实现了对业务逻辑的隔离。
 > 不是service,service是业务逻辑层
 
+### 4.JWT的流程
+![JWT的流程](https://i-blog.csdnimg.cn/direct/b8bf46b45a224d6c9b4fbc9f409624cf.png)
+
+### 5.客户端每发送一次请求都是一个线程
+> 每次客户端发送请求,都会创建一个线程,线程的id就是请求的id
+
 # TODO
-## 1.Navicat界面展示UNIQUE 和 DEFAULT的值
-## 2.Swagger新增接口设置不显示id
-## 3.idea的控制台的错误信息是否能设置的更显眼
-## 4.insert语句,需要用mybatis去完成
-## 5.处理SQL异常,之后用数据库校验报错信息返回前端
+1. [ ] Navicat设计界面展示UNIQUE 和 DEFAULT的值  
+2. [ ] Swagger新增接口请求参数设置不显示id
+3. [x] ~~idea的控制台的错误信息是否能设置的更显眼~~ 
+4. [ ] insert语句,需要用mybatis去完成 
+5. [ ] 处理SQL异常,之后用数据库校验报错信息返回前端
+6. [ ] 深入了解ThreadLocal是什么?还有Thread是什么?ps:是关于多线程的
+7. [ ] ThreadLocal类似于session?

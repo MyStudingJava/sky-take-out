@@ -101,6 +101,8 @@ sky:
 > idea整行移动快捷键: ctrl+alt+up/down
 > idea 整块移动快捷键: ctrl+shift+up/down
 
+### 8.导入文件需要重新编译compile一下
+
 # TODO
 1. [ ] Navicat设计界面展示UNIQUE 和 DEFAULT的值  
 2. [ ] Swagger新增接口请求参数设置不显示id

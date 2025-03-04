@@ -26,7 +26,7 @@ public interface EmployeeMapper {
     @Insert("insert into employee (name,username,password,phone,sex,id_number,status,create_time,update_time,create_user,update_user) " +
             "values" +
             "(#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
-    // TODO: 这里的insert语句,需要用mybatis的注解,而不是写sql语句
+    // TODO: 这里的insert语句,需要用mybatis plus的注解,而不是写sql语句
     void insert(Employee employee);
 
     /**

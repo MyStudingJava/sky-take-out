@@ -1,7 +1,7 @@
 # sky-take-out
 
-# day-01-08-开发环境搭建_后端环境搭建_前后端联调
-## 报错
+# 报错
+## day-01-08-开发环境搭建_后端环境搭建_前后端联调
 ### 1. 编译项目报错
 ```shell
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile (default-compile) on project sky-common: Fatal error compiling: java.lang.NoSuchFieldError: Class com.sun.tools.javac.tree.JCTree$JCImport does not have member field 'com.sun.tools.javac.tree.JCTree qualid' -> [Help 1]
@@ -37,6 +37,11 @@ sky:
     password: "xxxx"
 ```
 
+## day-02-07-员工分页查询_代码开发
+### 1. mapper文件没有报错---需要安装mybatisx插件
+![mapper文件没有报错](https://i-blog.csdnimg.cn/blog_migrate/f78f777f9f014e6460d5791afe018d2f.png)
+![mapper文件没有报错](https://i-blog.csdnimg.cn/blog_migrate/cfcce1f1f6a5e89b295b9cfd76836642.png)
+![mapper文件没有报错](https://i-blog.csdnimg.cn/blog_migrate/372830982faadf7d77b34bea4300ce6b.png)
 
 # 新东西
 ### 1.idea 进入下一层和进入底层快捷键
@@ -90,6 +95,7 @@ sky:
 > 小技巧：选中要计算的表达式，然后右键，选择Evaluate Expression，然后点击Evaluate即可。
 > ![小技巧](https://i-blog.csdnimg.cn/blog_migrate/3f47bc877db2f3f274a2ff7ab2d20247.png)
 
+### 6. sql语句的模糊匹配用like,concat进行拼接字符串
 
 # TODO
 1. [ ] Navicat设计界面展示UNIQUE 和 DEFAULT的值  
@@ -99,3 +105,4 @@ sky:
 5. [ ] 处理SQL异常,之后用数据库校验报错信息返回前端
 6. [ ] 深入了解ThreadLocal是什么?还有Thread是什么?ps:是关于多线程的
 7. [ ] ThreadLocal类似于session?
+8. [ ] mybatis和mybatis plus的区别,后续写第二版

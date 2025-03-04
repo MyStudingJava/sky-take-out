@@ -97,6 +97,10 @@ sky:
 
 ### 6. sql语句的模糊匹配用like,concat进行拼接字符串
 
+### 7. idea整行移动快捷键
+> idea整行移动快捷键: ctrl+alt+up/down
+> idea 整块移动快捷键: ctrl+shift+up/down
+
 # TODO
 1. [ ] Navicat设计界面展示UNIQUE 和 DEFAULT的值  
 2. [ ] Swagger新增接口请求参数设置不显示id

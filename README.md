@@ -97,11 +97,21 @@ sky:
 
 ### 6. sql语句的模糊匹配用like,concat进行拼接字符串
 
-### 7. idea整行移动快捷键
+## day-02-011-启用禁用员工账号_代码开发
+### 1. idea整行移动快捷键
 > idea整行移动快捷键: ctrl+alt+up/down
 > idea 整块移动快捷键: ctrl+shift+up/down
 
-### 8.导入文件需要重新编译compile一下
+## day-02-013-编辑员工_代码开发
+### 1.导入文件需要重新编译compile一下
+
+## day-03-01-公共字段自动填充_问题分析和实现思路
+![](https://i-blog.csdnimg.cn/direct/8e6904b442c6457793ef1ddcb04c4120.png)
+> 了解 AOP 
+> 简单来说，AOP就是将公共的模块封装成公共的方法，然后在需要的时候（这个就是切入点），直接就可以调用，而不用在各个对象里面具体的实现。
+> 了解 反射
+> 反射就是把java类中的各种成分映射成一个个的Java对象
+
 
 # TODO
 1. [ ] Navicat设计界面展示UNIQUE 和 DEFAULT的值  
@@ -112,3 +122,4 @@ sky:
 6. [ ] 深入了解ThreadLocal是什么?还有Thread是什么?ps:是关于多线程的
 7. [ ] ThreadLocal类似于session?
 8. [ ] mybatis和mybatis plus的区别,后续写第二版
+9. [ ] 复习多态和javaBean

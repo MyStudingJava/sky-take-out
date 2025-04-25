@@ -42,3 +42,6 @@ sky:
     access-key-id: ${sky.alioss.access-key-id}
     access-key-secret: ${sky.alioss.access-key-secret}
     bucket-name: ${sky.alioss.bucket-name}
+  file:
+    upload-dir: ${sky.file.upload-dir}
+    access-url: ${sky.file.access-url}

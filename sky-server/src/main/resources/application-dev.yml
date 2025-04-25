@@ -11,3 +11,6 @@ sky:
     access-key-id: LTAI5tDsEBkCe3cpqAfHAVxu
     access-key-secret: qNqBOmarYzN49LNdxY3mW9pAQwrCIp
     bucket-name: sky-itheima-castxxx
+  file:
+    upload-dir: E:/practice/JAVA_Studying/sky_delivery/sky-take-out/sky-server/src/main/resources/uploads
+    access-url: http://localhost:8080/uploads

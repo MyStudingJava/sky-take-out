@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.constant.MessageConstant;
 import com.sky.result.Result;
 import com.sky.utils.AliOssUtil;
 import io.swagger.annotations.Api;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -56,29 +56,28 @@ public class CommonController {
         // 构建新文件名称
         String newFileName = UUID.randomUUID() + extension;
 
-//
-//        try {
-//            String filePath = aliOssUtil.upload(file.getBytes(), newFileName);
-//            return Result.success(filePath);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String filePath = aliOssUtil.upload(file.getBytes(), newFileName);
+            return Result.success(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         /**
          * 本地上传
          */
-        File dest = new File(uploadDir + File.separator + newFileName);
-        try {
-            file.transferTo(dest);
-            // 返回前端可访问的 URL
-            String fileUrl = accessUrl + "/" + newFileName;
-            return Result.success(fileUrl);
-        } catch (IOException e) {
-            log.error("文件上传失败", e);
-            return Result.error("文件上传失败");
-        }
+//        File dest = new File(uploadDir + File.separator + newFileName);
+//        try {
+//            file.transferTo(dest);
+//            // 返回前端可访问的 URL
+//            String fileUrl = accessUrl + "/" + newFileName;
+//            return Result.success(fileUrl);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
+        return Result.error(MessageConstant.UPLOAD_FAILED);
     }
 
 }

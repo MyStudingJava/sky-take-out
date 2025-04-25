@@ -113,7 +113,9 @@ sky:
 > 反射就是把java类中的各种成分映射成一个个的Java对象
 
 ## day03-08-oss图片上传和本地图片保存
-![day03-08-oss图片上传]https://blog.csdn.net/m0_62519278/article/details/144827073?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-3-144827073-blog-120506081.235%5Ev43%5Epc_blog_bottom_relevance_base7&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-3-144827073-blog-120506081.235%5Ev43%5Epc_blog_bottom_relevance_base7&utm_relevant_index=4)
+[day03-08-oss图片上传](https://blog.csdn.net/m0_62519278/article/details/144827073?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-3-144827073-blog-120506081.235%5Ev43%5Epc_blog_bottom_relevance_base7&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-3-144827073-blog-120506081.235%5Ev43%5Epc_blog_bottom_relevance_base7&utm_relevant_index=4)
+
+[day03-08-oss本地图片保存](https://blog.csdn.net/weixin_61890982/article/details/145306244?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ECtr-5-145306244-blog-145266817.235%5Ev43%5Epc_blog_bottom_relevance_base7&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ECtr-5-145306244-blog-145266817.235%5Ev43%5Epc_blog_bottom_relevance_base7&utm_relevant_index=5)
 
 
 

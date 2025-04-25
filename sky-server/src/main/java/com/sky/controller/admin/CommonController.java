@@ -44,9 +44,9 @@ public class CommonController {
         // 构建新文件名称
         String objectName = UUID.randomUUID() + extension;
 
-
         try {
-            aliOssUtil.upload(file.getBytes(), objectName);
+            String filePath = aliOssUtil.upload(file.getBytes(), objectName);
+            return Result.success(filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }

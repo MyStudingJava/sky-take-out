@@ -26,7 +26,7 @@ public class AliOssUtil {
      * @param objectName
      * @return
      */
-    public String upload(byte[] bytes, String objectName) {
+    public String uploadFile(byte[] bytes, String objectName) {
 
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
@@ -64,5 +64,20 @@ public class AliOssUtil {
         log.info("文件上传到:{}", stringBuilder.toString());
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * 文件删除
+     * @param objectName OSS对象名称（包含路径）
+     */
+    public void deleteFile(String objectName) {
+        // 创建OSSClient实例。
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+
+        try {
+            ossClient.deleteObject(bucketName, objectName);
+        } catch (OSSException | ClientException e) {
+            throw new RuntimeException("OSS文件删除失败：" + e.getMessage());
+        }
     }
 }

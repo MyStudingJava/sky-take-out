@@ -13,6 +13,7 @@ import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
+import com.sky.service.CommonService;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+
+    @Autowired
+    private CommonService commonService;
 
 
     /**
@@ -86,6 +90,13 @@ public class DishServiceImpl implements DishService {
     @Transactional
     @Override
     public void delectBatch(List<Long> ids) {
+        // 判断当前菜品是否能否删除 -- 是否关联了套餐 ??
+        List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
+        if(setmealIds != null && setmealIds.size() > 0) {
+            // 存在关联套餐，不能删除
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+
         for (Long id : ids) {
             // 判断当前菜品是否能否删除 -- 是否存在起售中的菜品 ??
             Dish dish = dishMapper.getById(id);
@@ -93,13 +104,8 @@ public class DishServiceImpl implements DishService {
                 // 存在起售中的菜品，不能删除
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }
-        }
-
-        // 判断当前菜品是否能否删除 -- 是否关联了套餐 ??
-        List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
-        if(setmealIds != null && setmealIds.size() > 0) {
-            // 存在关联套餐，不能删除
-            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+            // 删除图片
+            commonService.deleteFile(dish.getImage());
         }
 
         /*for (Long id : ids) {

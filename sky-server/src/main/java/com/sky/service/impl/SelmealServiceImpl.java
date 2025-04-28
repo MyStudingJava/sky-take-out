@@ -12,6 +12,7 @@ import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
+import com.sky.service.CommonService;
 import com.sky.service.SelmealService;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,9 @@ public class SelmealServiceImpl implements SelmealService {
 
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+
+    @Autowired
+    private CommonService commonService;
 
     /**
      * 新增套餐
@@ -120,6 +124,12 @@ public class SelmealServiceImpl implements SelmealService {
      */
     @Override
     public void delectBatch(List<Long> ids) {
+        // 判断当前套餐是否能否删除 -- 是否关联了菜品 ??
+        List<Long> setmealIdsByDishIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
+        if(setmealIdsByDishIds != null && setmealIdsByDishIds.size() > 0){
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+
         // 判断当前套餐是否能否删除 -- 是否存在起售中的套餐 ??
         for (Long id : ids) {
             Setmeal setmeal = setmealMapper.getById(id);
@@ -127,12 +137,9 @@ public class SelmealServiceImpl implements SelmealService {
                 // 存在起售中的套餐，不能删除
                 throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
             }
-        }
 
-        // 判断当前套餐是否能否删除 -- 是否关联了菜品 ??
-        List<Long> setmealIdsByDishIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
-        if(setmealIdsByDishIds != null && setmealIdsByDishIds.size() > 0){
-            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+            // 删除图片
+            commonService.deleteFile(setmeal.getImage());
         }
 
         // 删除套餐

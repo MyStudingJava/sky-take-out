@@ -117,6 +117,14 @@ sky:
 
 [day03-08-oss本地图片保存](https://blog.csdn.net/weixin_61890982/article/details/145306244?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ECtr-5-145306244-blog-145266817.235%5Ev43%5Epc_blog_bottom_relevance_base7&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ECtr-5-145306244-blog-145266817.235%5Ev43%5Epc_blog_bottom_relevance_base7&utm_relevant_index=5)
 
+## day05-11-在java中操作Radis_Spring Data Redis使用方式_环境搭建
+### 1.为什么需要手动创建RedisTemplate
+> 原因:默认RedisTemplate有序列化问题,所以需要自定义
+```java
+redisTemplate.setKeySerializer(new StringRedisSerializer());
+redisTemplate.setValueSerializer(new StringRedisSerializer());
+```
+
 # 新需求(自己想的)
 ### 1.删除接口如果有文件,需要一并删除
 > 目前文件上传到oss上的文件名是随机的,所以删除的时候,需要根据文件名去删除

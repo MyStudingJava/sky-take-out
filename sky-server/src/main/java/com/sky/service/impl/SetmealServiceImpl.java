@@ -43,14 +43,14 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     @Transactional
     public void saveWithDish(SetmealDTO setmealDTO) {
-        Setmeal selmeal = new Setmeal();
-        BeanUtils.copyProperties(setmealDTO, selmeal);
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
 
         // 向套餐表插入1条数据，获取插入之后的id
-        setmealMapper.insert(selmeal);
+        setmealMapper.insert(setmeal);
 
         // 获取insert套餐的id
-        Long setmealId = selmeal.getId();
+        Long setmealId = setmeal.getId();
 
         // 向套餐菜品关系表插入多条数据
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();

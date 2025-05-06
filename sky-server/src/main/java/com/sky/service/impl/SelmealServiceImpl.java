@@ -163,4 +163,36 @@ public class SelmealServiceImpl implements SelmealService {
 
         setmealMapper.update(setmeal);
     }
+
+    /**
+     * 根据分类id查询套餐
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Setmeal> list(Long categoryId) {
+        Setmeal setmeal = Setmeal.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+
+        return setmealMapper.list(setmeal);
+    }
+
+    /**
+     * 根据套餐id查询菜品
+     * @param setmealId
+     * @return
+     */
+
+    @Override
+    public SetmealVO getBySetmealId(Long setmealId) {
+        Setmeal setmeal = setmealMapper.getById(setmealId);
+
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal, setmealVO);
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(setmealId);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+    }
 }

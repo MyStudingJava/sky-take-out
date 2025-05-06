@@ -9,7 +9,7 @@ import com.sky.exception.SetmealEnableFailedException;
 import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
-import com.sky.service.SelmealService;
+import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +29,7 @@ import java.util.List;
 public class SetmealController {
 
     @Autowired
-    private SelmealService SelmealService;
+    private SetmealService setmealService;
 
     @Autowired
     private DishMapper dishMapper;
@@ -42,7 +42,7 @@ public class SetmealController {
     @PostMapping
     @ApiOperation("新增套餐")
     public Result save(@RequestBody SetmealDTO setmealDTO){
-        SelmealService.saveWithDish(setmealDTO);
+        setmealService.saveWithDish(setmealDTO);
 
         return Result.success();
     }
@@ -55,7 +55,7 @@ public class SetmealController {
     @GetMapping("/page")
     @ApiOperation("套餐分页查询")
     public Result<PageResult> page(SetmealPageQueryDTO setmealPageQueryDTO){
-        PageResult pageResult = SelmealService.pageQuery(setmealPageQueryDTO);
+        PageResult pageResult = setmealService.pageQuery(setmealPageQueryDTO);
         return Result.success(pageResult);
     }
 
@@ -67,7 +67,7 @@ public class SetmealController {
     @GetMapping("/{id}")
     @ApiOperation("根据id查询套餐")
     public Result<SetmealVO> getById(@PathVariable Long id){
-        SetmealVO setmealVO = SelmealService.getByIdWithDish(id);
+        SetmealVO setmealVO = setmealService.getByIdWithDish(id);
 
         return Result.success(setmealVO);
     }
@@ -80,7 +80,7 @@ public class SetmealController {
     @PutMapping
     @ApiOperation("修改套餐")
     public Result update(@RequestBody SetmealDTO setmealDTO){
-        SelmealService.updateWithDish(setmealDTO);
+        setmealService.updateWithDish(setmealDTO);
 
         return Result.success();
     }
@@ -93,7 +93,7 @@ public class SetmealController {
     @DeleteMapping
     @ApiOperation("批量删除套餐")
     public Result delete(@RequestParam("ids") List<Long> ids) {
-        SelmealService.delectBatch(ids);
+        setmealService.delectBatch(ids);
 
         return Result.success();
     }
@@ -119,7 +119,7 @@ public class SetmealController {
                 });
             }
         }
-        SelmealService.startOrStop(status,id);
+        setmealService.startOrStop(status,id);
 
         return Result.success();
     }

@@ -13,7 +13,8 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.CommonService;
-import com.sky.service.SelmealService;
+import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class SelmealServiceImpl implements SelmealService {
+public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealMapper setmealMapper;
 
@@ -165,34 +166,18 @@ public class SelmealServiceImpl implements SelmealService {
     }
 
     /**
-     * 根据分类id查询套餐
-     * @param categoryId
+     * 条件查询
+     * @param setmeal
      * @return
      */
     @Override
-    public List<Setmeal> list(Long categoryId) {
-        Setmeal setmeal = Setmeal.builder()
-                .categoryId(categoryId)
-                .status(StatusConstant.ENABLE)
-                .build();
-
-        return setmealMapper.list(setmeal);
+    public List<Setmeal> list(Setmeal setmeal) {
+        List<Setmeal> list = setmealMapper.list(setmeal);
+        return list;
     }
 
-    /**
-     * 根据套餐id查询菜品
-     * @param setmealId
-     * @return
-     */
-
     @Override
-    public SetmealVO getBySetmealId(Long setmealId) {
-        Setmeal setmeal = setmealMapper.getById(setmealId);
-
-        SetmealVO setmealVO = new SetmealVO();
-        BeanUtils.copyProperties(setmeal, setmealVO);
-        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(setmealId);
-        setmealVO.setSetmealDishes(setmealDishes);
-        return setmealVO;
+    public List<DishItemVO> getDishItemById(Long setmealId) {
+        return setmealMapper.getDishItemById(setmealId);
     }
 }

@@ -4,11 +4,12 @@ import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 
 import java.util.List;
 
-public interface SelmealService {
+public interface SetmealService {
 
     /**
      * 新增套餐
@@ -50,16 +51,16 @@ public interface SelmealService {
     void startOrStop(Integer status, Long id);
 
     /**
-     * 根据分类id查询套餐
-     * @param categoryId
+     * 条件查询
+     * @param setmeal
      * @return
      */
-    List<Setmeal> list(Long categoryId);
+    List<Setmeal> list(Setmeal setmeal);
 
     /**
-     * 根据套餐id查询菜品
+     * 根据id查询菜品选项
      * @param setmealId
      * @return
      */
-    SetmealVO getBySetmealId(Long setmealId);
+    List<DishItemVO> getDishItemById(Long setmealId);
 }

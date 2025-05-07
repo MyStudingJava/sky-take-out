@@ -124,6 +124,10 @@ sky:
 redisTemplate.setKeySerializer(new StringRedisSerializer());
 redisTemplate.setValueSerializer(new StringRedisSerializer());
 ```
+### 2. 存储在数据库的值是乱码
+> 原因: value会有乱码的现象，key不会有问题，是因为序列化器不同，所以结果不同。
+> 解决:
+
 
 # 新需求(自己想的)
 ### 1.删除接口如果有文件,需要一并删除
@@ -141,3 +145,4 @@ redisTemplate.setValueSerializer(new StringRedisSerializer());
 7. [ ] ThreadLocal类似于session?
 8. [ ] mybatis和mybatis plus的区别,后续写第二版
 9. [ ] 复习多态和javaBean
+10. [ ] 存储在数据库的值是乱码

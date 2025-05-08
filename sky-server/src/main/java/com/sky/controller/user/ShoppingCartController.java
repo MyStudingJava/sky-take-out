@@ -53,6 +53,10 @@ public class ShoppingCartController {
         return Result.success();
     }
 
+    /**
+     * 删除购物车
+     * @return
+     */
     @PostMapping("/sub")
     @ApiOperation("删除购物车")
     public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO) {

@@ -10,12 +10,12 @@ import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.ShoppingCartMapper;
 import com.sky.service.shoppingCartService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,67 +30,45 @@ public class ShoppingCartImpl implements shoppingCartService {
 
     /**
      * 添加购物车
-     * @param shoppingCartDTO
      */
     @Override
     public void addShoppingCart(ShoppingCartDTO shoppingCartDTO) {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        ShoppingCart cart = buildCartFromDTO(shoppingCartDTO);
 
-        // 获取当前登录用户的id
-        Long userId = BaseContext.getCurrentId();
-        shoppingCart.setUserId(userId);
+        // 查询是否已存在该商品
+        Optional<ShoppingCart> existingCartOpt = findCartInDB(cart);
 
-        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
-
-        // 判断当前加入到购物车中的商品是否已经存在
-        // 如果已经存在,  数量加1
-        if(list != null && list.size() > 0){
-            ShoppingCart cart = list.get(0);
-            cart.setNumber(cart.getNumber() + 1);
-
-            shoppingCartMapper.updateNumberById(cart);
+        if (existingCartOpt.isPresent()) {
+            ShoppingCart existingCart = existingCartOpt.get();
+            existingCart.setNumber(existingCart.getNumber() + 1);
+            shoppingCartMapper.updateNumberById(existingCart);
         } else {
-            // 如果不存在,  添加到购物车,  数量默认就是1
-            // 判断添加的是菜品还是套餐
+            // 如果不存在，设置默认信息并插入
             Long dishId = shoppingCartDTO.getDishId();
-            if(dishId != null){
-                // 菜品
+            if (dishId != null) {
                 Dish dish = dishMapper.getById(dishId);
-
-                shoppingCart.setName(dish.getName());
-                shoppingCart.setImage(dish.getImage());
-                shoppingCart.setAmount(dish.getPrice());
-
+                cart.setName(dish.getName());
+                cart.setImage(dish.getImage());
+                cart.setAmount(dish.getPrice());
             } else {
-                // 套餐
-                Long setmealId = shoppingCartDTO.getSetmealId();
-
-                Setmeal setmeal = setmealMapper.getById(setmealId);
-
-                shoppingCart.setName(setmeal.getName());
-                shoppingCart.setImage(setmeal.getImage());
-                shoppingCart.setAmount(setmeal.getPrice());
-
+                Setmeal setmeal = setmealMapper.getById(shoppingCartDTO.getSetmealId());
+                cart.setName(setmeal.getName());
+                cart.setImage(setmeal.getImage());
+                cart.setAmount(setmeal.getPrice());
             }
 
-            shoppingCart.setNumber(1);
-            shoppingCart.setCreateTime(LocalDateTime.now());
-            shoppingCartMapper.insert(shoppingCart);
+            cart.setNumber(1);
+            cart.setCreateTime(LocalDateTime.now());
+            shoppingCartMapper.insert(cart);
         }
     }
 
     /**
      * 查看购物车
-     * @return
      */
     @Override
     public List<ShoppingCart> list() {
-        Long userId = BaseContext.getCurrentId();
-        ShoppingCart shoppingCart = ShoppingCart.builder()
-                          .userId(userId)
-                          .build();
-        return shoppingCartMapper.list(shoppingCart);
+        return shoppingCartMapper.list(getCurrentUserCartTemplate());
     }
 
     /**
@@ -98,34 +76,55 @@ public class ShoppingCartImpl implements shoppingCartService {
      */
     @Override
     public void clean() {
-        Long userId = BaseContext.getCurrentId();
-        ShoppingCart shoppingCart = ShoppingCart.builder()
-                .userId(userId)
-                .build();
-        shoppingCartMapper.deleteShoppingCart(shoppingCart);
+        shoppingCartMapper.deleteShoppingCart(getCurrentUserCartTemplate());
     }
 
     /**
-     * 删除购物车
-     * @param shoppingCartDTO
+     * 删除购物车中的某个商品（数量减一或删除）
      */
     @Override
-    public void sub(ShoppingCartDTO shoppingCartDTO) {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+    public void sub(ShoppingCartDTO dto) {
+        ShoppingCart cart = buildCartFromDTO(dto);
+        Optional<ShoppingCart> cartOpt = findCartInDB(cart);
 
-        Long userId = BaseContext.getCurrentId(); // 获取当前用户ID
-        shoppingCart.setUserId(userId); // 设置用户ID，避免漏传
-
-        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart); // 根据 dishId/setmealId + userId 查询
-
-        ShoppingCart cart = list.get(0); // 取出第一条记录
-
-        if (cart.getNumber() > 1) {
-            cart.setNumber(cart.getNumber() - 1);
-            shoppingCartMapper.updateNumberById(cart);
+        if (cartOpt.isPresent()) {
+            ShoppingCart cartInDB = cartOpt.get();
+            if (cartInDB.getNumber() > 1) {
+                cartInDB.setNumber(cartInDB.getNumber() - 1);
+                shoppingCartMapper.updateNumberById(cartInDB);
+            } else {
+                shoppingCartMapper.deleteShoppingCart(cartInDB);
+            }
         } else {
-            shoppingCartMapper.deleteShoppingCart(cart); // 删除该条购物车记录
+            throw new RuntimeException("购物车中无此商品");
         }
+    }
+
+    /**
+     * 获取当前用户的购物车对象模板（仅含 userId）
+     */
+    private ShoppingCart getCurrentUserCartTemplate() {
+        return ShoppingCart.builder()
+                .userId(BaseContext.getCurrentId())
+                .build();
+    }
+
+    /**
+     * 根据 DTO 构建完整的购物车对象（包含 dishId 或 setmealId）
+     */
+    private ShoppingCart buildCartFromDTO(ShoppingCartDTO dto) {
+        return ShoppingCart.builder()
+                .dishId(dto.getDishId())
+                .setmealId(dto.getSetmealId())
+                .userId(BaseContext.getCurrentId())
+                .build();
+    }
+
+    /**
+     * 查询当前用户下的匹配购物车记录
+     */
+    private Optional<ShoppingCart> findCartInDB(ShoppingCart cart) {
+        List<ShoppingCart> list = shoppingCartMapper.list(cart);
+        return list != null && !list.isEmpty() ? Optional.of(list.get(0)) : Optional.empty();
     }
 }

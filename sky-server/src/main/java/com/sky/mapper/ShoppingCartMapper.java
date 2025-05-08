@@ -40,5 +40,5 @@ public interface ShoppingCartMapper {
      * @return
      */
     @Select("select * from shopping_cart where user_id = #{userId}")
-    List<ShoppingCart> list();
+    List<ShoppingCart> list(Long userId);
 }

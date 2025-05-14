@@ -52,6 +52,7 @@
         </where>
         ORDER BY s.create_time DESC
     </select>
+
     <select id="list" resultType="com.sky.entity.Setmeal">
         SELECT * FROM setmeal
         <where>

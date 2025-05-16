@@ -1,13 +1,11 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
-import com.sky.entity.AddressBook;
-import com.sky.entity.OrderDetail;
-import com.sky.entity.Orders;
-import com.sky.entity.ShoppingCart;
+import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
@@ -121,28 +119,29 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception {
-        return easyPayment(ordersPaymentDTO);
-
         // 当前登录用户id
-//        Long userId = BaseContext.getCurrentId();
-//        User user = userMapper.getById(userId);
-//
-//        //调用微信支付接口，生成预支付交易单
+        Long userId = BaseContext.getCurrentId();
+        User user = userMapper.getById(userId);
+
+        //调用微信支付接口，生成预支付交易单
 //        JSONObject jsonObject = weChatPayUtil.pay(
 //                ordersPaymentDTO.getOrderNumber(), //商户订单号
 //                new BigDecimal(0.01), //支付金额，单位 元
 //                "苍穹外卖订单", //商品描述
 //                user.getOpenid() //微信用户的openid
 //        );
-//
-//        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
-//            throw new OrderBusinessException("该订单已支付");
-//        }
-//
-//        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
-//        vo.setPackageStr(jsonObject.getString("package"));
-//
-//        return vo;
+
+        // 生成空的JSON,跳过微信支付流程
+        JSONObject jsonObject = new JSONObject();
+
+        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
+            throw new OrderBusinessException("该订单已支付");
+        }
+
+        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
+        vo.setPackageStr(jsonObject.getString("package"));
+
+        return vo;
     }
 
 
@@ -166,55 +165,5 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
-    }
-
-
-    private OrderPaymentVO easyPayment(OrdersPaymentDTO ordersPaymentDTO){
-        // 获取订单号
-        String orderNumber = ordersPaymentDTO.getOrderNumber();
-
-        Orders orders = orderMapper.getByNumber(orderNumber);
-
-        // 判断支付状态是否是待付款
-        if(!orders.getPayStatus().equals(Orders.UN_PAID)){
-            // 不是待付款订单,无法进行支付,抛出异常
-            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
-        }
-
-        // 修改支付状态为已付款
-        orders.setPayStatus(Orders.PAID);
-
-        // 修改订单状态为待接单
-        orders.setStatus(Orders.TO_BE_CONFIRMED);
-
-        // 在数据库中修改
-        orderMapper.update(orders);
-
-        // 手动封装vo对象返回
-        OrderPaymentVO orderPaymentVO = OrderPaymentVO.builder()
-                .nonceStr("pay success")
-                .signType("wechat")
-                .paySign("null")
-                .timeStamp(String.valueOf(LocalDateTime.now()))
-                .packageStr("pay success")
-                .build();
-
-        return orderPaymentVO;
-
-        // 支付成功后,第一时间通知外卖商家 (来电提醒 | 出外卖单子)
-
-        // 通过WebSocket 实现服务端向客户端推送消息 (无需提醒,这就是WebSocket的优势之一)
-
-        // 客户端解析服务器推送的消息, 判断来电提送还是客户催单,并进行相应的消息提示和语音
-        // 前后端约定,服务端发送的数据格式为json,字段包括: type,orderId,content
-        // type: 1表示来电提醒,2表示催单
-        // orderId: 订单id content: 提醒内容
-        // Map<Object,Object> map = new HashMap();
-        // map.put("type", WebSocketConstant.NEW_ORDER);
-        // map.put("orderId", orders.getId());
-        // map.put("content", "订单号:" + orderNumber);
-
-        // 通过WebSocket实现来电提醒,向客户端浏览器推送消息
-        // webSocketServer.sendToAllClient(JSON.toJSONString(map));
     }
 }

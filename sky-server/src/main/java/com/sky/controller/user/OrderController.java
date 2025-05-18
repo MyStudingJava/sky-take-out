@@ -71,7 +71,7 @@ public class OrderController {
      * @param id
      * @return
      */
-    @GetMapping("/historyOrders/{id}")
+    @GetMapping("/orderDetail/{id}")
     @ApiOperation("根据id查询历史订单详情")
     public Result<OrderVO> getById(@PathVariable Long id) {
         OrderVO orderVO = orderService.getById(id);

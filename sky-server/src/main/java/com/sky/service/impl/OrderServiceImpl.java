@@ -244,7 +244,9 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Orders orders = new Orders();
-        orders.setId(id);
+        // orders.setId(id);
+        // 更安全可靠
+        orders.setId(ordersDB.getId());
 
         // 订单处于待接单状态下取消,需要进行退款
         if(ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)){

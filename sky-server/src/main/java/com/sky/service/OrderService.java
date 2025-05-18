@@ -27,28 +27,46 @@ public interface OrderService {
     void paySuccess(String outTradeNo);
 
     /**
-     * 历史订单查询
+     * 订单列表
      * @param ordersPageQueryDTO
      * @return
      */
     PageResult pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
     /**
-     * 根据id查询历史订单详情
+     * 根据id查询订单详情
      * @param id
      * @return
      */
     OrderVO getById(Long id);
 
     /**
-     * 用户取消订单
-     * @param id
-     */
-    void userCancelById(Long id);
-
-    /**
      * 再来一单
      * @param id
      */
     void repetition(Long id);
+
+    /**
+     * 统计订单数据
+     * @return
+     */
+    OrderStatisticsVO statistics();
+
+    /**
+     * 用户取消订单
+     * @param ordersCancelDTO
+     */
+    void cancelOrder(OrdersCancelDTO ordersCancelDTO);
+
+    /**
+     * 更改状态
+     * @param id
+     */
+    void changeOrderStatus(Long id);
+
+    /**
+     * 拒单
+     * @param ordersRejectionDTO
+     */
+    void rejectOrder(OrdersRejectionDTO ordersRejectionDTO);
 }

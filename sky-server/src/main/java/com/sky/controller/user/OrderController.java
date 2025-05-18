@@ -1,5 +1,6 @@
 package com.sky.controller.user;
 
+import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
@@ -11,7 +12,6 @@ import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController("userOrderController")
 @RequestMapping("/user/order")
-@Slf4j
 @Api(tags = "C端订单接口")
 public class OrderController {
 
@@ -54,12 +53,12 @@ public class OrderController {
     }
 
     /**
-     * 查询历史订单
+     * 查询订单
      * @param ordersPageQueryDTO
      * @return
      */
     @GetMapping("/historyOrders")
-    @ApiOperation("查询历史订单")
+    @ApiOperation("查询订单")
     public Result<PageResult> historyOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
         PageResult pageResult = orderService.pageQuery(ordersPageQueryDTO);
 
@@ -67,12 +66,12 @@ public class OrderController {
     }
 
     /**
-     * 根据id查询历史订单详情
+     * 根据id查询订单详情
      * @param id
      * @return
      */
     @GetMapping("/orderDetail/{id}")
-    @ApiOperation("根据id查询历史订单详情")
+    @ApiOperation("根据id查询订单详情")
     public Result<OrderVO> getById(@PathVariable Long id) {
         OrderVO orderVO = orderService.getById(id);
 
@@ -87,7 +86,11 @@ public class OrderController {
     @PutMapping("/cancel/{id}")
     @ApiOperation("用户取消订单")
     public Result userCancelById(@PathVariable Long id) {
-        orderService.userCancelById(id);
+        OrdersCancelDTO ordersCancelDTO = new OrdersCancelDTO();
+        ordersCancelDTO.setId(id);
+        ordersCancelDTO.setCancelReason("用户取消");
+
+        orderService.cancelOrder(ordersCancelDTO);
         return Result.success();
     }
 

@@ -146,3 +146,29 @@ redisTemplate.setValueSerializer(new StringRedisSerializer());
 8. [ ] mybatis和mybatis plus的区别,后续写第二版
 9. [ ] 复习多态和javaBean
 10. [ ] 存储在数据库的值是乱码
+11. [ ] 权限设置,查询只能查询自己的,除了管理员可以查到全部
+12. [ ] 商家订单管理模块的 - 接单 拒单 派送订单 完成订单 未测试
+13. [ ] `已有功能优化
+
+  优化用户下单功能，加入校验逻辑，如果用户的收货地址距离商家门店超出配送范围（配送范围为5公里内），则下单失败。
+
+提示：
+
+​	1. 基于百度地图开放平台实现（https://lbsyun.baidu.com/）
+
+​	2. 注册账号--->创建应用获取AK(服务端应用)--->调用接口
+
+3. 相关接口
+
+   https://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding
+
+   https://lbsyun.baidu.com/index.php?title=webapi/directionlite-v1
+
+4. 商家门店地址可以配置在配置文件中，例如：
+
+   ~~~yaml
+   sky:
+     shop:
+       address: 北京市海淀区上地十街10号
+   ~~~`
+

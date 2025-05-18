@@ -117,6 +117,7 @@ public class ShoppingCartImpl implements shoppingCartService {
                 .dishId(dto.getDishId())
                 .setmealId(dto.getSetmealId())
                 .userId(BaseContext.getCurrentId())
+                .dishFlavor(dto.getDishFlavor())
                 .build();
     }
 

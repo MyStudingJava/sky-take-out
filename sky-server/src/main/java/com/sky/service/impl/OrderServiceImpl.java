@@ -127,7 +127,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception {
         // 当前登录用户id
         Long userId = BaseContext.getCurrentId();
-        User user = userMapper.getById(userId);
+        // User user = userMapper.getById(userId);
 
         //调用微信支付接口，生成预支付交易单
 //        JSONObject jsonObject = weChatPayUtil.pay(
@@ -182,9 +182,25 @@ public class OrderServiceImpl implements OrderService {
     public PageResult pageQuery(OrdersPageQueryDTO ordersPageQueryDTO) {
         PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
 
+        // 设置为当前用户的订单
+        Long userId = BaseContext.getCurrentId();
+        ordersPageQueryDTO.setUserId(userId);
         Page<Orders> page = orderMapper.pageQuery(ordersPageQueryDTO);
 
-        return new PageResult(page.getTotal(), page.getResult());
+        ArrayList<OrderVO> list = new ArrayList();
+
+        // 查询该订单明细(菜品/套餐)
+        if(page != null && page.getTotal() > 0){
+            for (Orders orders : page) {
+                OrderVO orderVO = getById(orders.getId());
+
+                list.add(orderVO);
+            }
+
+        }
+
+
+        return new PageResult(page.getTotal(), list);
     }
 
     /**

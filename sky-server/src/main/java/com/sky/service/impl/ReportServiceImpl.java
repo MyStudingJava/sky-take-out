@@ -3,8 +3,10 @@ package com.sky.service.impl;
 import com.sky.dto.ReportDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 营业额统计
@@ -64,6 +68,58 @@ public class ReportServiceImpl implements ReportService {
         return TurnoverReportVO.builder()
                 .dateList(StringUtils.join(dateList, ","))
                 .turnoverList(StringUtils.join(turnoverList, ","))
+                .build();
+    }
+
+    /**
+     * 用户统计
+     * @param reportDTO
+     * @return
+     */
+    @Override
+    public UserReportVO getUserReport(ReportDTO reportDTO) {
+        LocalDate begin = reportDTO.getBegin();
+        LocalDate end = reportDTO.getEnd();
+        if (begin == null || end == null) {
+            // 如果为空, 默认查询最近7天的数据
+            end = LocalDate.now();
+            begin = end.minusDays(6);
+        }
+
+        // 计算日期, 开始日期到结束日期区间
+        ArrayList<LocalDate> dateList = new ArrayList<>();
+        while (begin.compareTo(end) <= 0) {
+            dateList.add(begin);
+            begin = begin.plusDays(1);
+        }
+
+        // 查询每天新增用户数量
+        ArrayList<Integer> newUserList = new ArrayList<>();
+        // 查询每天总用户数量
+        ArrayList<Integer> totalUserList = new ArrayList<>();
+        for (LocalDate date : dateList) {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+
+            HashMap hashMap = new HashMap();
+            hashMap.put("end", endTime); // 只加end 结束时间,自动匹配统计总数的sql
+
+            // 总用户数
+            // select count(id) from user where create_time > ?
+            Integer totalUser = userMapper.countByMap(hashMap);
+            totalUserList.add(totalUser);
+
+            hashMap.put("begin", beginTime); // 加begin 开始时间,自动匹配新增用户的sql
+            // 新增用户数
+            // select count(id) from user where create_time > ? and create_time < ?
+            Integer newUser = userMapper.countByMap(hashMap);
+            newUserList.add(newUser);
+        }
+
+        return UserReportVO.builder()
+                .dateList(StringUtils.join(dateList, ","))
+                .totalUserList(StringUtils.join(totalUserList, ","))
+                .newUserList(StringUtils.join(newUserList, ","))
                 .build();
     }
 }

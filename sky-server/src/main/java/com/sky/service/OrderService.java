@@ -69,4 +69,10 @@ public interface OrderService {
      * @param ordersRejectionDTO
      */
     void rejectOrder(OrdersRejectionDTO ordersRejectionDTO);
+
+    /**
+     * 催单
+     * @param id
+     */
+    void reminder(Long id);
 }

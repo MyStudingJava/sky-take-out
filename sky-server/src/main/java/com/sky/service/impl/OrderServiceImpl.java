@@ -185,11 +185,8 @@ public class OrderServiceImpl implements OrderService {
         // map.put("content", "订单号：" + orders.getNumber() + "下单成功!");
 
         map.put("content", "订单号：" + outTradeNo);
-        //通过websocket向客户端浏览器推送消息
         String json = JSON.toJSONString(map);
         webSocketServer.sendToAllClient(json);
-
-
     }
 
     /**
@@ -378,6 +375,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) {
+        Orders ordersDB = orderMapper.getById(id);
+
+        if(ordersDB == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("type", 2); // 消息类型 1 来单提醒 2 客户催单
+        map.put("orderId", ordersDB.getId());
+        // map.put("content", "订单号：" + ordersDB.getNumber() + "下单成功!");
+
+        map.put("content", "订单号：" + ordersDB.getNumber());
+        String json = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(json);
+    }
+
+    /**
      * 再来一单
      * @param id
      */
@@ -412,10 +432,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderStatisticsVO statistics() {
         // 待接单数据
-        Integer confirmed = orderMapper.countByStatus(Orders.TO_BE_CONFIRMED);
+        Integer confirmed = orderMapper.countByStatus(Orders.CONFIRMED);
 
         // 待派送数据
-        Integer toBeConfirmed = orderMapper.countByStatus(Orders.CONFIRMED);
+        Integer toBeConfirmed = orderMapper.countByStatus(Orders.TO_BE_CONFIRMED);
 
         // 派送中数据
         Integer deliveryInProgress = orderMapper.countByStatus(Orders.DELIVERY_IN_PROGRESS);

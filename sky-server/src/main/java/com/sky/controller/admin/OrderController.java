@@ -64,7 +64,7 @@ public class OrderController {
      * @param ordersCancelDTO
      * @return
      */
-    @PutMapping("/cancel/{id}")
+    @PutMapping("/cancel")
     @ApiOperation("取消订单")
     public Result cancelOrder(@RequestBody OrdersCancelDTO ordersCancelDTO){
         orderService.cancelOrder(ordersCancelDTO);

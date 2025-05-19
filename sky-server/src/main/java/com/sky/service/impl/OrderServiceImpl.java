@@ -337,8 +337,8 @@ public class OrderServiceImpl implements OrderService {
         // 更安全可靠
         orders.setId(ordersDB.getId());
 
-        // 订单处于待接单状态下取消,需要进行退款
-        if(ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)){
+        // 订单处于已支付下拒单,需要进行退款
+        if(ordersDB.getStatus().equals(Orders.PAID)){
             // 调用支付退款接口
             try {
                 weChatPayUtil.refund(

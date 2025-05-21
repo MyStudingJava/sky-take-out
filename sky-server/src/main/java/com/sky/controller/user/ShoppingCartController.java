@@ -3,7 +3,7 @@ package com.sky.controller.user;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
 import com.sky.result.Result;
-import com.sky.service.shoppingCartService;
+import com.sky.service.ShoppingCartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.List;
 @Api(tags = "C端-购物车接口")
 public class ShoppingCartController {
     @Autowired
-    private shoppingCartService shoppingCartService;
+    private ShoppingCartService shoppingCartService;
 
     /**
      * 添加购物车

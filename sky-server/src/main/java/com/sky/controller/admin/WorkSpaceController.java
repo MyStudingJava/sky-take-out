@@ -5,64 +5,71 @@ import com.sky.service.WorkSpaceService;
 import com.sky.vo.BusinessDataVO;
 import com.sky.vo.DishOverViewVO;
 import com.sky.vo.OrderOverViewVO;
+import com.sky.vo.SetmealOverViewVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 /**
- * 工作台相关接口
+ * 工作台
  */
-@RestController()
+@RestController
 @RequestMapping("/admin/workspace")
 @Api(tags = "工作台相关接口")
 public class WorkSpaceController {
+
     @Autowired
     private WorkSpaceService workSpaceService;
 
     /**
-     * 获取今日营业数据
+     * 工作台今日数据查询
      * @return
      */
-    @RequestMapping("/businessData")
-    @ApiOperation("获取工作台统计数据")
-    public Result<BusinessDataVO> getBusinessData() {
-        BusinessDataVO businessData =  workSpaceService.getBusinessData();
-        return Result.success(businessData);
-    }
+    @GetMapping("/businessData")
+    @ApiOperation("工作台今日数据查询")
+    public Result<BusinessDataVO> businessData(){
+        //获得当天的开始时间
+        LocalDateTime begin = LocalDateTime.now().with(LocalTime.MIN);
+        //获得当天的结束时间
+        LocalDateTime end = LocalDateTime.now().with(LocalTime.MAX);
 
-
-    /**
-     * 获取订单统计数据
-     * @return
-     */
-    @RequestMapping("/overviewOrders")
-    @ApiOperation("获取订单统计数据")
-    public Result<OrderOverViewVO> getOverViewOrders() {
-        OrderOverViewVO orderOverView= workSpaceService.getOverViewOrders();
-        return Result.success(orderOverView);
+        BusinessDataVO businessDataVO = workSpaceService.getBusinessData(begin, end);
+        return Result.success(businessDataVO);
     }
 
     /**
-     * 获取菜品统计数据
+     * 查询订单管理数据
      * @return
      */
-    @RequestMapping("/overviewDishes")
-    @ApiOperation("获取菜品统计数据")
-    public Result<DishOverViewVO> getOverViewDishes(){
-        DishOverViewVO dishOverViewVO = workSpaceService.getOverViewDishes();
-        return Result.success(dishOverViewVO);
+    @GetMapping("/overviewOrders")
+    @ApiOperation("查询订单管理数据")
+    public Result<OrderOverViewVO> orderOverView(){
+        return Result.success(workSpaceService.getOrderOverView());
     }
 
     /**
-     * 获取套餐统计数据
+     * 查询菜品总览
      * @return
      */
-    @RequestMapping("/overviewSetmeals")
-    @ApiOperation("获取套餐统计数据")
-    public Result<DishOverViewVO> getOverViewSetmeals(){
-        DishOverViewVO dishOverViewVO = workSpaceService.getOverViewSetmeals();
-        return Result.success(dishOverViewVO);
+    @GetMapping("/overviewDishes")
+    @ApiOperation("查询菜品总览")
+    public Result<DishOverViewVO> dishOverView(){
+        return Result.success(workSpaceService.getDishOverView());
+    }
+
+    /**
+     * 查询套餐总览
+     * @return
+     */
+    @GetMapping("/overviewSetmeals")
+    @ApiOperation("查询套餐总览")
+    public Result<SetmealOverViewVO> setmealOverView(){
+        return Result.success(workSpaceService.getSetmealOverView());
     }
 }

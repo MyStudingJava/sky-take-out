@@ -49,14 +49,6 @@ public interface OrderMapper {
     Orders getById(Long id);
 
     /**
-     * 查询订单数量
-     * @param toBeConfirmed
-     * @return
-     */
-    @Select("select count(id) from orders where status = #{status}")
-    Integer countByStatus(Integer toBeConfirmed);
-
-    /**
      * 根据状态和下单时间查询订单
      * @param status
      * @param orderTime

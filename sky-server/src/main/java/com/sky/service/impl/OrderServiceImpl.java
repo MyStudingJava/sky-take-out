@@ -431,14 +431,19 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderStatisticsVO statistics() {
+        HashMap hashMap = new HashMap<>();
+        hashMap.put("status", Orders.CONFIRMED);
+
         // 待接单数据
-        Integer confirmed = orderMapper.countByStatus(Orders.CONFIRMED);
+        Integer confirmed = orderMapper.countByMap(hashMap);
 
+        hashMap.put("status", Orders.TO_BE_CONFIRMED);
         // 待派送数据
-        Integer toBeConfirmed = orderMapper.countByStatus(Orders.TO_BE_CONFIRMED);
+        Integer toBeConfirmed = orderMapper.countByMap(hashMap);
 
+        hashMap.put("status", Orders.DELIVERY_IN_PROGRESS);
         // 派送中数据
-        Integer deliveryInProgress = orderMapper.countByStatus(Orders.DELIVERY_IN_PROGRESS);
+        Integer deliveryInProgress = orderMapper.countByMap(hashMap);
 
         OrderStatisticsVO vo = new OrderStatisticsVO();
         vo.setConfirmed(confirmed);

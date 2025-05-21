@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/admin/report")
 @Api(tags = "数据统计接口")
@@ -67,5 +69,17 @@ public class ReportController {
     public Result<SalesTop10ReportVO> getSalesTop10Report(ReportDTO reportDTO){
         SalesTop10ReportVO salesTop10ReportVO = reportService.getSalesTop10Report(reportDTO);
         return Result.success(salesTop10ReportVO);
+    }
+
+    /**
+     * 导出运营数据报表
+     * @param response
+     * @return
+     */
+    @GetMapping("/export")
+    @ApiOperation("导出运营数据报表接口")
+    // 响应结果为文件流 -- 用HttpServletResponse response
+    public void exportBusinessData(HttpServletResponse response) {
+        reportService.exportBusinessData(response);
     }
 }

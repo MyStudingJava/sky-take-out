@@ -6,6 +6,8 @@ import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface ReportService {
     /**
      * 营业额统计
@@ -34,4 +36,11 @@ public interface ReportService {
      * @return
      */
     SalesTop10ReportVO getSalesTop10Report(ReportDTO reportDTO);
+
+    /**
+     * 导出Excel
+     * @param response
+     * @return
+     */
+    void exportBusinessData(HttpServletResponse response);
 }
